@@ -24,6 +24,9 @@ const toSvgPoint = (event, svg) => {
 const distanceBetween = (first, second) =>
   Math.hypot(second.x - first.x, second.y - first.y);
 
+const TRACE_DISTANCE_TARGET = 240;
+const TRACE_MIN_ZONES = 5;
+
 export const TraceLetterGame = ({
   round,
   solved,
@@ -39,20 +42,15 @@ export const TraceLetterGame = ({
   const [isDrawing, setIsDrawing] = useState(false);
   const [points, setPoints] = useState([]);
   const [distance, setDistance] = useState(0);
+  const [zoneCount, setZoneCount] = useState(0);
   const [tapMode, setTapMode] = useState(false);
   const [tapStep, setTapStep] = useState(0);
-  const progress = Math.min(100, Math.round((distance / 180) * 100));
-
-  const finishIfReady = (nextDistance, nextZones) => {
-    if (
-      !completedRef.current &&
-      nextDistance >= 150 &&
-      nextZones.length >= 3
-    ) {
-      completedRef.current = true;
-      onComplete();
-    }
-  };
+  const progress = Math.min(
+    100,
+    Math.round((distance / TRACE_DISTANCE_TARGET) * 100),
+  );
+  const traceReady =
+    distance >= TRACE_DISTANCE_TARGET && zoneCount >= TRACE_MIN_ZONES;
 
   const beginTrace = (event) => {
     if (solved) {
@@ -61,9 +59,16 @@ export const TraceLetterGame = ({
 
     event.currentTarget.setPointerCapture?.(event.pointerId);
     const point = toSvgPoint(event, svgRef.current);
+    const zone = `${Math.floor(point.x / 80)}-${Math.floor(point.y / 74)}`;
+    const nextZones = visitedZonesRef.current.includes(zone)
+      ? visitedZonesRef.current
+      : [...visitedZonesRef.current, zone];
+
     lastPointRef.current = point;
+    visitedZonesRef.current = nextZones;
     setIsDrawing(true);
     setPoints((current) => [...current, point]);
+    setZoneCount(nextZones.length);
     onEdit();
   };
 
@@ -85,7 +90,7 @@ export const TraceLetterGame = ({
     visitedZonesRef.current = nextZones;
     setPoints((current) => [...current, point]);
     setDistance(nextDistance);
-    finishIfReady(nextDistance, nextZones);
+    setZoneCount(nextZones.length);
   };
 
   const clearTrace = () => {
@@ -99,8 +104,18 @@ export const TraceLetterGame = ({
     visitedZonesRef.current = [];
     setPoints([]);
     setDistance(0);
+    setZoneCount(0);
     setTapStep(0);
     onEdit();
+  };
+
+  const finishTrace = () => {
+    if (!traceReady || solved || completedRef.current) {
+      return;
+    }
+
+    completedRef.current = true;
+    onComplete();
   };
 
   const handleTapStep = (step) => {
@@ -164,6 +179,14 @@ export const TraceLetterGame = ({
             <span style={{ width: `${progress}%` }} />
           </div>
           <div className="trace-actions">
+            <button
+              className="primary-button"
+              type="button"
+              onClick={finishTrace}
+              disabled={solved || !traceReady}
+            >
+              Finish tracing
+            </button>
             <button
               className="text-button"
               type="button"
