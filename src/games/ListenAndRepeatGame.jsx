@@ -7,6 +7,7 @@ export const ListenAndRepeatGame = ({
   onComplete,
   onEdit,
   onListen,
+  compact = false,
 }) => {
   const {
     audioUrl,
@@ -24,15 +25,19 @@ export const ListenAndRepeatGame = ({
   };
 
   return (
-    <div className="repeat-game">
-      <AnimalIllustration
-        animal={round.target}
-        className="repeat-animal"
-        labelled
-      />
+    <div className={`repeat-game ${compact ? 'repeat-game--compact' : ''}`}>
+      {!compact && (
+        <AnimalIllustration
+          animal={round.target}
+          className="repeat-animal"
+          labelled
+        />
+      )}
       <p className="repeat-word">{round.target.word}</p>
       <p className="repeat-instruction">
-        Listen carefully. Then record yourself saying the word.
+        {compact
+          ? 'Listen, then record yourself saying the word.'
+          : 'Listen carefully. Then record yourself saying the word.'}
       </p>
 
       <div className="repeat-actions">
@@ -103,7 +108,7 @@ export const ListenAndRepeatGame = ({
               onClick={onComplete}
               disabled={solved}
             >
-              I said {round.target.word}
+              {compact ? 'Done practising' : `I said ${round.target.word}`}
             </button>
           </div>
         </div>

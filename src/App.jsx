@@ -4,8 +4,6 @@ import { CompletionScreen } from './components/CompletionScreen';
 import { Header } from './components/Header';
 import { WelcomeScreen } from './components/WelcomeScreen';
 import { animals } from './data/animals';
-import { HandsOnGame } from './games/HandsOnGame';
-import { ListenAndRepeatGame } from './games/ListenAndRepeatGame';
 import { MovementGame } from './games/MovementGame';
 import { SentenceGame } from './games/SentenceGame';
 import { SoundBlendGame } from './games/SoundBlendGame';
@@ -34,14 +32,6 @@ const getSuccessMessage = (round) => {
 
   if (round.type === 'movement') {
     return `Your whole body learned ${round.target.word}!`;
-  }
-
-  if (round.type === 'handsOn') {
-    return `You made ${round.target.word.toUpperCase()} with your hands!`;
-  }
-
-  if (round.type === 'repeat') {
-    return `You listened and said ${round.target.word}!`;
   }
 
   return `Yes! That word is ${round.target.word}.`;
@@ -140,20 +130,6 @@ const App = () => {
         onListen={playNarration}
       />
     ),
-    repeat: (
-      <ListenAndRepeatGame
-        key={round.id}
-        round={round}
-        solved={solved}
-        onComplete={() => markCorrect()}
-        onEdit={() => {
-          if (!solved) {
-            setFeedback('');
-          }
-        }}
-        onListen={playNarration}
-      />
-    ),
     trace: (
       <TraceLetterGame
         key={round.id}
@@ -211,19 +187,6 @@ const App = () => {
           }
         }}
         onListen={playNarration}
-      />
-    ),
-    handsOn: (
-      <HandsOnGame
-        key={round.id}
-        round={round}
-        solved={solved}
-        onComplete={() => markCorrect()}
-        onEdit={() => {
-          if (!solved) {
-            setFeedback('');
-          }
-        }}
       />
     ),
     sentence: (

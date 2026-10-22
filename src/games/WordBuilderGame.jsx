@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { AnimalIllustration } from '../components/AnimalIllustration';
+import { HandsOnGame } from './HandsOnGame';
 
 export const WordBuilderGame = ({
   round,
@@ -9,6 +10,8 @@ export const WordBuilderGame = ({
   onListen,
 }) => {
   const [selectedIds, setSelectedIds] = useState([]);
+  const [showHandsOn, setShowHandsOn] = useState(false);
+  const [handsOnComplete, setHandsOnComplete] = useState(false);
   const selectedTiles = selectedIds.map((id) =>
     round.letters.find((tile) => tile.id === id),
   );
@@ -129,6 +132,37 @@ export const WordBuilderGame = ({
           );
         })}
       </div>
+
+      {solved && (
+        <div className="compact-extension">
+          {!showHandsOn && !handsOnComplete && (
+            <button
+              className="secondary-button"
+              type="button"
+              onClick={() => setShowHandsOn(true)}
+            >
+              Try real materials <span>(optional)</span>
+            </button>
+          )}
+          {showHandsOn && !handsOnComplete && (
+            <HandsOnGame
+              round={round}
+              solved={false}
+              onComplete={() => {
+                setHandsOnComplete(true);
+                setShowHandsOn(false);
+              }}
+              onEdit={() => undefined}
+              compact
+            />
+          )}
+          {handsOnComplete && (
+            <p className="compact-extension__done" role="status">
+              ✓ Hands-on practice complete
+            </p>
+          )}
+        </div>
+      )}
     </div>
   );
 };
