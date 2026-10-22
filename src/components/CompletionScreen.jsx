@@ -19,11 +19,11 @@ export const CompletionScreen = ({ animal, stars, onReplay, onHome }) => (
         ))}
       </div>
       <p className="completion-copy">
-        You looked, listened, touched, and moved through every word. Four ways
-        to practise, one wild reading trail.
+        You looked, listened, spoke, made, and moved through every word. Your
+        voice recordings stayed on this device.
       </p>
       <SensoryStrip
-        activeModalities={['sight', 'listen', 'touch', 'move']}
+        activeModalities={['sight', 'listen', 'speak', 'handsOn', 'move']}
       />
       <div className="completion-actions">
         <button className="primary-button" type="button" onClick={onReplay}>

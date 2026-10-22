@@ -2,6 +2,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { afterEach, describe, expect, it, vi } from 'vitest';
 import { animals } from '../data/animals';
+import { HandsOnGame } from './HandsOnGame';
+import { ListenAndRepeatGame } from './ListenAndRepeatGame';
 import { MovementGame } from './MovementGame';
 import { SoundBlendGame } from './SoundBlendGame';
 import { TraceLetterGame } from './TraceLetterGame';
@@ -126,6 +128,52 @@ describe('multisensory activities', () => {
     expect(onAttempt).toHaveBeenLastCalledWith(true);
   });
 
+  it('records, plays back, and completes listen-and-repeat practice', async () => {
+    const user = userEvent.setup();
+    const onComplete = vi.fn();
+
+    render(
+      <ListenAndRepeatGame
+        round={createRound('repeat')}
+        solved={false}
+        onComplete={onComplete}
+        onEdit={vi.fn()}
+        onListen={vi.fn()}
+      />,
+    );
+
+    await user.click(
+      screen.getByRole('button', { name: 'Record my voice' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Stop recording' }));
+
+    expect(screen.getByLabelText('Play your recording')).toHaveAttribute(
+      'src',
+      'blob:voice-recording',
+    );
+    await user.click(screen.getByRole('button', { name: 'I said cat' }));
+    expect(onComplete).toHaveBeenCalledOnce();
+  });
+
+  it('turns common materials into a physical word-making activity', async () => {
+    const user = userEvent.setup();
+    const onComplete = vi.fn();
+
+    render(
+      <HandsOnGame
+        round={createRound('handsOn')}
+        solved={false}
+        onComplete={onComplete}
+        onEdit={vi.fn()}
+      />,
+    );
+
+    await user.click(screen.getByRole('button', { name: 'Clay' }));
+    expect(screen.getByText(/Roll clay into lines and curves/i)).toBeInTheDocument();
+    await user.click(screen.getByRole('button', { name: 'I made CAT' }));
+    expect(onComplete).toHaveBeenCalledOnce();
+  });
+
   it('guides a seated movement, countdown, replay, and completion', () => {
     vi.useFakeTimers();
     const onComplete = vi.fn();
@@ -160,5 +208,30 @@ describe('multisensory activities', () => {
     fireEvent.click(screen.getByRole('button', { name: 'I did it' }));
 
     expect(onComplete).toHaveBeenCalledOnce();
+  });
+
+  it('plays a dedicated roar example for the lion movement', async () => {
+    const user = userEvent.setup();
+    const onListen = vi.fn();
+    const lion = animals.find(({ id }) => id === 'lion');
+
+    render(
+      <MovementGame
+        round={createRound('movement', lion)}
+        solved={false}
+        onComplete={vi.fn()}
+        onSkip={vi.fn()}
+        onEdit={vi.fn()}
+        onListen={onListen}
+      />,
+    );
+
+    await user.click(
+      screen.getByRole('button', { name: 'Hear a lion roar' }),
+    );
+    expect(onListen).toHaveBeenCalledWith({
+      src: expect.stringContaining('/audio/examples/lion-roar.wav'),
+      text: 'Rooooar!',
+    });
   });
 });

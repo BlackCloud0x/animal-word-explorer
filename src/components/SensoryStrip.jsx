@@ -1,7 +1,8 @@
 const modalityDetails = {
   sight: { symbol: '◉', label: 'Look' },
   listen: { symbol: '♪', label: 'Listen' },
-  touch: { symbol: '✦', label: 'Touch' },
+  speak: { symbol: '◌', label: 'Speak' },
+  handsOn: { symbol: '✦', label: 'Hands-on' },
   move: { symbol: '↟', label: 'Move' },
 };
 

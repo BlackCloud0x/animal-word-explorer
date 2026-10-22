@@ -39,3 +39,39 @@ class MockAudio {
 }
 
 window.Audio = MockAudio;
+
+Object.defineProperty(navigator, 'mediaDevices', {
+  configurable: true,
+  value: {
+    getUserMedia: vi.fn(async () => ({
+      getTracks: () => [{ stop: vi.fn() }],
+    })),
+  },
+});
+
+window.MediaRecorder = class MockMediaRecorder {
+  constructor() {
+    this.mimeType = 'audio/webm';
+    this.state = 'inactive';
+  }
+
+  start() {
+    this.state = 'recording';
+  }
+
+  stop() {
+    this.state = 'inactive';
+    this.ondataavailable?.({ data: new Blob(['voice']) });
+    this.onstop?.();
+  }
+};
+
+Object.defineProperty(URL, 'createObjectURL', {
+  configurable: true,
+  value: vi.fn(() => 'blob:voice-recording'),
+});
+
+Object.defineProperty(URL, 'revokeObjectURL', {
+  configurable: true,
+  value: vi.fn(),
+});

@@ -10,14 +10,15 @@ export const WelcomeScreen = ({ animals, onStart }) => (
           Read, listen &amp; <span>roar!</span>
         </h1>
         <p className="intro">
-          See it, hear it, trace it, build it, and move with it. Each animal
-          word becomes a calm four-sense reading adventure.
+          See it, hear it, say it, make it, and move with it. Each animal word
+          becomes a calm multisensory reading adventure.
         </p>
         <SensoryStrip
-          activeModalities={['sight', 'listen', 'touch', 'move']}
+          activeModalities={['sight', 'listen', 'speak', 'handsOn', 'move']}
         />
         <ul className="feature-list" aria-label="Game features">
-          <li>6 quick activities</li>
+          <li>8 short activities</li>
+          <li>Private voice practice</li>
           <li>Seated choices</li>
           <li>Ages 5–7</li>
         </ul>
