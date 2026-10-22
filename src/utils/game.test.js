@@ -25,19 +25,21 @@ describe('game helpers', () => {
     expect(new Set(tiles.map((tile) => tile.id)).size).toBe(3);
   });
 
-  it('builds a six-round progressive session', () => {
+  it('builds an eight-round progressive session', () => {
     const rounds = generateSession(animals, () => 0.42);
 
     expect(rounds.map((round) => round.type)).toEqual([
       'word',
+      'repeat',
       'trace',
       'blend',
       'build',
+      'handsOn',
       'movement',
       'sentence',
     ]);
-    expect(rounds).toHaveLength(6);
-    expect(new Set(rounds.map((round) => round.target.id)).size).toBe(6);
+    expect(rounds).toHaveLength(8);
+    expect(new Set(rounds.map((round) => round.target.id)).size).toBe(8);
 
     rounds
       .filter((round) => ['word', 'sentence'].includes(round.type))
@@ -47,10 +49,11 @@ describe('game helpers', () => {
       });
 
     expect(getSessionModalities(rounds).sort()).toEqual([
+      'handsOn',
       'listen',
       'move',
       'sight',
-      'touch',
+      'speak',
     ]);
     expect(sessionHasAllModalities(rounds)).toBe(true);
   });

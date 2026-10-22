@@ -1,4 +1,5 @@
-const audioPath = (path) => `${import.meta.env.BASE_URL}audio/${path}.wav`;
+const baseUrl = import.meta.env?.BASE_URL ?? '/';
+const audioPath = (path) => `${baseUrl}audio/${path}.wav`;
 
 const audioFor = (id) => ({
   word: audioPath(`words/${id}`),
@@ -221,6 +222,8 @@ export const animals = [
       action: 'roar',
       count: 1,
       seated: 'Sit tall, open your arms, and make one gentle roar.',
+      exampleAudio: audioPath('examples/lion-roar'),
+      exampleText: 'Rooooar!',
     },
     audio: audioFor('lion'),
     palette: 'sunshine',

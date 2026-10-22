@@ -39,6 +39,15 @@ export const MovementGame = ({
       text: instruction,
     });
 
+  const playExample = () => {
+    const { exampleAudio, exampleText } = round.target.movement;
+
+    onListen({
+      src: exampleAudio ?? round.target.audio.movement,
+      text: exampleText ?? instruction,
+    });
+  };
+
   const startMoving = () => {
     setCountdown(3);
     setPhase('countdown');
@@ -79,10 +88,13 @@ export const MovementGame = ({
         <button
           className="listen-inline"
           type="button"
-          onClick={playInstruction}
+          onClick={playExample}
           disabled={solved}
         >
-          <span aria-hidden="true">♪</span> Hear it again
+          <span aria-hidden="true">♪</span>{' '}
+          {round.target.movement.exampleAudio
+            ? 'Hear a lion roar'
+            : 'Hear it again'}
         </button>
       </div>
 

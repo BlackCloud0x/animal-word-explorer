@@ -27,28 +27,44 @@ export const createLetterTiles = (word, random = Math.random) =>
     random,
   );
 
-export const sensoryModalities = ['sight', 'listen', 'touch', 'move'];
+export const sensoryModalities = [
+  'sight',
+  'listen',
+  'speak',
+  'handsOn',
+  'move',
+];
 
 export const activityDetails = {
   word: {
     eyebrow: 'Eyes & ears',
     title: 'Find the word',
-    modalities: ['sight', 'listen', 'touch'],
+    modalities: ['sight', 'listen', 'handsOn'],
+  },
+  repeat: {
+    eyebrow: 'Your turn to talk',
+    title: 'Listen & repeat',
+    modalities: ['sight', 'listen', 'speak'],
   },
   trace: {
     eyebrow: 'Finger writing',
     title: 'Trace & say',
-    modalities: ['sight', 'listen', 'touch'],
+    modalities: ['sight', 'listen', 'handsOn'],
   },
   blend: {
     eyebrow: 'Sound steps',
     title: 'Tap & blend',
-    modalities: ['sight', 'listen', 'touch'],
+    modalities: ['sight', 'listen', 'handsOn'],
   },
   build: {
     eyebrow: 'Letters in action',
     title: 'Build the word',
-    modalities: ['sight', 'listen', 'touch'],
+    modalities: ['sight', 'listen', 'handsOn'],
+  },
+  handsOn: {
+    eyebrow: 'Make it for real',
+    title: 'Choose & create',
+    modalities: ['sight', 'speak', 'handsOn'],
   },
   movement: {
     eyebrow: 'Whole body word',
@@ -58,13 +74,22 @@ export const activityDetails = {
   sentence: {
     eyebrow: 'Reading detective',
     title: 'Read the clue',
-    modalities: ['sight', 'listen', 'touch'],
+    modalities: ['sight', 'listen', 'handsOn'],
   },
 };
 
 export const generateSession = (animalList, random = Math.random) => {
-  const targets = shuffle(animalList, random).slice(0, 6);
-  const types = ['word', 'trace', 'blend', 'build', 'movement', 'sentence'];
+  const targets = shuffle(animalList, random).slice(0, 8);
+  const types = [
+    'word',
+    'repeat',
+    'trace',
+    'blend',
+    'build',
+    'handsOn',
+    'movement',
+    'sentence',
+  ];
 
   return targets.map((target, index) => ({
     id: `${types[index]}-${target.id}`,
