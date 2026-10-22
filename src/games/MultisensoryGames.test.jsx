@@ -48,7 +48,8 @@ describe('multisensory activities', () => {
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
-  it('accepts a broad pointer trace without demanding perfect handwriting', () => {
+  it('waits for the child to confirm a sufficiently broad trace', async () => {
+    const user = userEvent.setup();
     const onComplete = vi.fn();
 
     render(
@@ -62,12 +63,17 @@ describe('multisensory activities', () => {
     );
 
     const board = screen.getByRole('img', { name: 'Trace the letter C' });
-    fireEvent.pointerDown(board, { clientX: 10, clientY: 20, pointerId: 1 });
-    fireEvent.pointerMove(board, { clientX: 90, clientY: 70, pointerId: 1 });
-    fireEvent.pointerMove(board, { clientX: 170, clientY: 130, pointerId: 1 });
-    fireEvent.pointerMove(board, { clientX: 225, clientY: 190, pointerId: 1 });
+    fireEvent.pointerDown(board, { clientX: 10, clientY: 10, pointerId: 1 });
+    fireEvent.pointerMove(board, { clientX: 220, clientY: 10, pointerId: 1 });
+    fireEvent.pointerMove(board, { clientX: 220, clientY: 110, pointerId: 1 });
+    fireEvent.pointerMove(board, { clientX: 20, clientY: 110, pointerId: 1 });
+    fireEvent.pointerMove(board, { clientX: 20, clientY: 210, pointerId: 1 });
     fireEvent.pointerUp(board, { pointerId: 1 });
 
+    expect(onComplete).not.toHaveBeenCalled();
+    await user.click(
+      screen.getByRole('button', { name: 'Finish tracing' }),
+    );
     expect(onComplete).toHaveBeenCalledOnce();
   });
 
