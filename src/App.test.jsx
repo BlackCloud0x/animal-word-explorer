@@ -7,13 +7,24 @@ import { animals } from './data/animals';
 const completeCurrentRound = async (user) => {
   const heading = screen.getByRole('heading', { level: 1 });
 
-  if (heading.textContent === 'Find the word') {
+  if (heading.textContent === 'Find, listen & repeat') {
     const label = screen.getByRole('img').getAttribute('aria-label');
     const word = label.replace(' illustration', '');
     await user.click(screen.getByRole('button', { name: word }));
     expect(screen.getByTestId('feedback')).toHaveTextContent(
       `That word is ${word}`,
     );
+    await user.click(
+      screen.getByRole('button', { name: /Try listen & repeat/i }),
+    );
+    await user.click(
+      screen.getByRole('button', { name: 'Record my voice' }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Stop recording' }));
+    await user.click(
+      screen.getByRole('button', { name: 'Done practising' }),
+    );
+    expect(screen.getByText('✓ Voice practice complete')).toBeInTheDocument();
     return;
   }
 
@@ -25,26 +36,6 @@ const completeCurrentRound = async (user) => {
       );
     }
     expect(screen.getByTestId('feedback')).toHaveTextContent('You traced');
-    return;
-  }
-
-  if (heading.textContent === 'Listen & repeat') {
-    const label = screen.getByRole('img').getAttribute('aria-label');
-    const word = label.replace(' illustration', '');
-
-    await user.click(
-      screen.getByRole('button', { name: 'Record my voice' }),
-    );
-    await user.click(screen.getByRole('button', { name: 'Stop recording' }));
-    expect(
-      screen.getByLabelText('Play your recording'),
-    ).toBeInTheDocument();
-    await user.click(
-      screen.getByRole('button', { name: `I said ${word}` }),
-    );
-    expect(screen.getByTestId('feedback')).toHaveTextContent(
-      `listened and said ${word}`,
-    );
     return;
   }
 
@@ -67,7 +58,7 @@ const completeCurrentRound = async (user) => {
     return;
   }
 
-  if (heading.textContent === 'Build the word') {
+  if (heading.textContent === 'Build & make') {
     const label = screen.getByRole('img').getAttribute('aria-label');
     const word = label.replace(' illustration', '');
 
@@ -80,6 +71,18 @@ const completeCurrentRound = async (user) => {
     expect(screen.getByTestId('feedback')).toHaveTextContent(
       `You built ${word.toUpperCase()}`,
     );
+    await user.click(
+      screen.getByRole('button', { name: /Try real materials/i }),
+    );
+    await user.click(screen.getByRole('button', { name: 'Paper' }));
+    await user.click(
+      screen.getByRole('button', {
+        name: `I made ${word.toUpperCase()}`,
+      }),
+    );
+    expect(
+      screen.getByText('✓ Hands-on practice complete'),
+    ).toBeInTheDocument();
     return;
   }
 
@@ -89,22 +92,6 @@ const completeCurrentRound = async (user) => {
     );
     expect(screen.getByTestId('feedback')).toHaveTextContent(
       'Movement skipped',
-    );
-    return;
-  }
-
-  if (heading.textContent === 'Choose & create') {
-    const label = screen.getByRole('img').getAttribute('aria-label');
-    const word = label.replace(' illustration', '');
-
-    await user.click(screen.getByRole('button', { name: 'Paper' }));
-    await user.click(
-      screen.getByRole('button', {
-        name: `I made ${word.toUpperCase()}`,
-      }),
-    );
-    expect(screen.getByTestId('feedback')).toHaveTextContent(
-      `made ${word.toUpperCase()} with your hands`,
     );
     return;
   }
@@ -135,9 +122,9 @@ describe('Animal Word Explorer', () => {
 
     await user.click(screen.getByRole('button', { name: 'Start exploring' }));
     expect(
-      screen.getByRole('heading', { name: 'Find the word' }),
+      screen.getByRole('heading', { name: 'Find, listen & repeat' }),
     ).toBeInTheDocument();
-    expect(screen.getByText('Activity 1 of 8')).toBeInTheDocument();
+    expect(screen.getByText('Activity 1 of 6')).toBeInTheDocument();
   });
 
   it('completes all activities and starts a new session', async () => {
@@ -145,21 +132,21 @@ describe('Animal Word Explorer', () => {
     render(<App />);
     await user.click(screen.getByRole('button', { name: 'Start exploring' }));
 
-    for (let round = 0; round < 8; round += 1) {
+    for (let round = 0; round < 6; round += 1) {
       await completeCurrentRound(user);
       expect(
         screen.getByLabelText(`${round + 1} stars earned`),
       ).toBeInTheDocument();
-      const nextName = round === 7 ? 'See my stars' : 'Next';
+      const nextName = round === 5 ? 'See my stars' : 'Next';
       await user.click(screen.getByRole('button', { name: nextName }));
     }
 
     expect(
       screen.getByRole('heading', { name: 'Wild reading!' }),
     ).toBeInTheDocument();
-    expect(screen.getByLabelText('8 stars earned')).toBeInTheDocument();
+    expect(screen.getByLabelText('6 stars earned')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Play new words' }));
-    expect(screen.getByText('Activity 1 of 8')).toBeInTheDocument();
+    expect(screen.getByText('Activity 1 of 6')).toBeInTheDocument();
   });
 });

@@ -1,10 +1,10 @@
 # Animal Word Explorer
 
-A calm, multisensory English reading game for children ages 5–7. Every
-eight-activity session combines sight, listening, speaking, hands-on making, and
-guided body movement through word recognition, tracing, phoneme blending, letter
-building, movement, reading clues, local voice recording, and off-screen
-activities using paper, clay, sand, or letter tiles.
+A calm, multisensory English reading game for children ages 5–7. Every compact
+six-activity session combines sight, listening, speaking, hands-on making, and
+guided body movement. Voice practice is folded into word recognition, while
+off-screen paper, clay, sand, or letter-tile practice is folded into digital word
+building.
 
 Play the published version at
 [blackcloud0x.github.io/animal-word-explorer](https://blackcloud0x.github.io/animal-word-explorer/).

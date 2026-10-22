@@ -1,4 +1,6 @@
+import { useState } from 'react';
 import { AnimalIllustration } from '../components/AnimalIllustration';
+import { ListenAndRepeatGame } from './ListenAndRepeatGame';
 
 export const WordChoiceGame = ({
   round,
@@ -7,6 +9,9 @@ export const WordChoiceGame = ({
   onAnswer,
   onListen,
 }) => {
+  const [showVoicePractice, setShowVoicePractice] = useState(false);
+  const [voicePractised, setVoicePractised] = useState(false);
+
   const choiceClass = (animal) => {
     if (solved && animal.id === round.target.id) {
       return 'word-choice choice--correct';
@@ -57,6 +62,38 @@ export const WordChoiceGame = ({
           </button>
         ))}
       </div>
+
+      {solved && (
+        <div className="compact-extension">
+          {!showVoicePractice && !voicePractised && (
+            <button
+              className="secondary-button"
+              type="button"
+              onClick={() => setShowVoicePractice(true)}
+            >
+              Try listen &amp; repeat <span>(optional)</span>
+            </button>
+          )}
+          {showVoicePractice && !voicePractised && (
+            <ListenAndRepeatGame
+              round={round}
+              solved={false}
+              onComplete={() => {
+                setVoicePractised(true);
+                setShowVoicePractice(false);
+              }}
+              onEdit={() => undefined}
+              onListen={onListen}
+              compact
+            />
+          )}
+          {voicePractised && (
+            <p className="compact-extension__done" role="status">
+              ✓ Voice practice complete
+            </p>
+          )}
+        </div>
+      )}
     </>
   );
 };

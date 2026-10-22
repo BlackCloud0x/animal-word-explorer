@@ -857,6 +857,29 @@ button.letter-slot {
   align-items: center;
 }
 
+.compact-extension {
+  width: min(680px, 100%);
+  margin-top: 18px;
+  padding-top: 15px;
+  border-top: 2px dashed var(--surface-soft);
+}
+
+.compact-extension > .secondary-button {
+  min-height: 48px;
+  padding: 10px 18px;
+}
+
+.compact-extension > .secondary-button span {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+}
+
+.compact-extension__done {
+  margin: 0;
+  color: var(--success);
+  font-weight: 900;
+}
+
 .repeat-animal {
   width: min(205px, 54vw);
   margin: -20px auto -26px;
@@ -869,6 +892,14 @@ button.letter-slot {
   font-size: clamp(2.6rem, 9vw, 4.5rem);
   font-weight: 900;
   letter-spacing: 0.04em;
+}
+
+.repeat-game--compact .repeat-word {
+  font-size: clamp(2rem, 7vw, 3rem);
+}
+
+.repeat-game--compact .repeat-instruction {
+  margin-bottom: 12px;
 }
 
 .repeat-instruction {
@@ -952,6 +983,10 @@ button.letter-slot {
   width: min(680px, 100%);
   flex-direction: column;
   align-items: center;
+}
+
+.hands-on-game--compact .hands-on-prompt {
+  margin-bottom: 12px;
 }
 
 .hands-on-animal {

@@ -32,7 +32,13 @@ const materials = [
   },
 ];
 
-export const HandsOnGame = ({ round, solved, onComplete, onEdit }) => {
+export const HandsOnGame = ({
+  round,
+  solved,
+  onComplete,
+  onEdit,
+  compact = false,
+}) => {
   const [selectedMaterial, setSelectedMaterial] = useState(null);
   const material = materials.find(({ id }) => id === selectedMaterial);
 
@@ -46,15 +52,26 @@ export const HandsOnGame = ({ round, solved, onComplete, onEdit }) => {
   };
 
   return (
-    <div className="hands-on-game">
-      <AnimalIllustration
-        animal={round.target}
-        className="hands-on-animal"
-        labelled
-      />
+    <div className={`hands-on-game ${compact ? 'hands-on-game--compact' : ''}`}>
+      {!compact && (
+        <AnimalIllustration
+          animal={round.target}
+          className="hands-on-animal"
+          labelled
+        />
+      )}
       <p className="hands-on-prompt">
-        Choose something you have nearby and make{' '}
-        <strong>{round.target.word.toUpperCase()}</strong>.
+        {compact ? (
+          <>
+            Make <strong>{round.target.word.toUpperCase()}</strong> again with
+            something you can touch.
+          </>
+        ) : (
+          <>
+            Choose something nearby and make{' '}
+            <strong>{round.target.word.toUpperCase()}</strong>.
+          </>
+        )}
       </p>
 
       <div className="material-grid" aria-label="Choose a hands-on material">

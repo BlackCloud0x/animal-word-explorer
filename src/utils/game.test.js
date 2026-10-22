@@ -25,21 +25,19 @@ describe('game helpers', () => {
     expect(new Set(tiles.map((tile) => tile.id)).size).toBe(3);
   });
 
-  it('builds an eight-round progressive session', () => {
+  it('builds a compact six-round progressive session', () => {
     const rounds = generateSession(animals, () => 0.42);
 
     expect(rounds.map((round) => round.type)).toEqual([
       'word',
-      'repeat',
       'trace',
       'blend',
       'build',
-      'handsOn',
       'movement',
       'sentence',
     ]);
-    expect(rounds).toHaveLength(8);
-    expect(new Set(rounds.map((round) => round.target.id)).size).toBe(8);
+    expect(rounds).toHaveLength(6);
+    expect(new Set(rounds.map((round) => round.target.id)).size).toBe(6);
 
     rounds
       .filter((round) => ['word', 'sentence'].includes(round.type))

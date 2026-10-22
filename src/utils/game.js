@@ -37,13 +37,8 @@ export const sensoryModalities = [
 
 export const activityDetails = {
   word: {
-    eyebrow: 'Eyes & ears',
-    title: 'Find the word',
-    modalities: ['sight', 'listen', 'handsOn'],
-  },
-  repeat: {
-    eyebrow: 'Your turn to talk',
-    title: 'Listen & repeat',
+    eyebrow: 'Eyes, ears & voice',
+    title: 'Find, listen & repeat',
     modalities: ['sight', 'listen', 'speak'],
   },
   trace: {
@@ -57,14 +52,9 @@ export const activityDetails = {
     modalities: ['sight', 'listen', 'handsOn'],
   },
   build: {
-    eyebrow: 'Letters in action',
-    title: 'Build the word',
-    modalities: ['sight', 'listen', 'handsOn'],
-  },
-  handsOn: {
-    eyebrow: 'Make it for real',
-    title: 'Choose & create',
-    modalities: ['sight', 'speak', 'handsOn'],
+    eyebrow: 'Digital & physical letters',
+    title: 'Build & make',
+    modalities: ['sight', 'listen', 'speak', 'handsOn'],
   },
   movement: {
     eyebrow: 'Whole body word',
@@ -79,17 +69,8 @@ export const activityDetails = {
 };
 
 export const generateSession = (animalList, random = Math.random) => {
-  const targets = shuffle(animalList, random).slice(0, 8);
-  const types = [
-    'word',
-    'repeat',
-    'trace',
-    'blend',
-    'build',
-    'handsOn',
-    'movement',
-    'sentence',
-  ];
+  const targets = shuffle(animalList, random).slice(0, 6);
+  const types = ['word', 'trace', 'blend', 'build', 'movement', 'sentence'];
 
   return targets.map((target, index) => ({
     id: `${types[index]}-${target.id}`,

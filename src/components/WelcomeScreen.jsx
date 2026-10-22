@@ -17,7 +17,7 @@ export const WelcomeScreen = ({ animals, onStart }) => (
           activeModalities={['sight', 'listen', 'speak', 'handsOn', 'move']}
         />
         <ul className="feature-list" aria-label="Game features">
-          <li>8 short activities</li>
+          <li>6 compact activities</li>
           <li>Private voice practice</li>
           <li>Seated choices</li>
           <li>Ages 5–7</li>
